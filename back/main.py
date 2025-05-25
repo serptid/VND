@@ -1,14 +1,25 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base
 import models
 import schemas
 
-# Инициализация
-models.Base.metadata.create_all(bind=engine)
+# Создание таблиц при запуске
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
-# Зависимость для получения сессии БД
+# Разрешение CORS (для фронтенда на другом порту, например, localhost:3000)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # или ["http://localhost:3000"] для безопасности
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Зависимость подключения к БД
 def get_db():
     db = SessionLocal()
     try:
@@ -16,25 +27,23 @@ def get_db():
     finally:
         db.close()
 
-# ➕ Добавить аббревиатуру
+# ➕ Добавление новой аббревиатуры
 @app.post("/abbreviations/", response_model=schemas.AbbreviationOut)
 def create_abbreviation(abbr: schemas.AbbreviationCreate, db: Session = Depends(get_db)):
-    db_abbr = models.Abbreviation(**abbr.dict())
+    db_abbr = models.Abbreviation(**abbr.model_dump())
     db.add(db_abbr)
     db.commit()
     db.refresh(db_abbr)
     return db_abbr
 
-# ➕ Добавить пример использования
-@app.post("/usages/", response_model=schemas.UsageOut)
-def create_usage(usage: schemas.UsageCreate, db: Session = Depends(get_db)):
-    # Проверка, что аббревиатура существует
-    abbr = db.query(models.Abbreviation).filter(models.Abbreviation.id == usage.abbreviation_id).first()
-    if not abbr:
-        raise HTTPException(status_code=404, detail="Аббревиатура не найдена")
-    
-    db_usage = models.Usage(**usage.model_dump())
-    db.add(db_usage)
-    db.commit()
-    db.refresh(db_usage)
-    return db_usage
+# 📋 Получение всех аббревиатур
+@app.get("/abbreviations/", response_model=list[schemas.AbbreviationOut])
+def list_abbreviations(db: Session = Depends(get_db)):
+    return db.query(models.Abbreviation).order_by(models.Abbreviation.id).all()
+
+# 🔍 Поиск по аббревиатуре (например: ?query=дв)
+@app.get("/abbreviations/search", response_model=list[schemas.AbbreviationOut])
+def search_abbreviations(query: str, db: Session = Depends(get_db)):
+    return db.query(models.Abbreviation)\
+             .filter(models.Abbreviation.short.ilike(f"%{query}%"))\
+             .order_by(models.Abbreviation.id).all()
