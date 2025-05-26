@@ -1,8 +1,7 @@
 // app/page.tsx
 'use client' // обязательно для использования useEffect
 
-import { useEffect, useState } from 'react'
-import { FiSearch, FiX } from 'react-icons/fi'
+import { useState } from 'react'
 import SearchBar from './components/SearchBox'
 
 export default function HomePage() {
