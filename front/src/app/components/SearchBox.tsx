@@ -26,7 +26,7 @@ export default function SearchBar({ onSearch, fullDataList }: SearchBarProps) {
     }
 
     const timeout = setTimeout(() => {
-      fetch(`http://localhost:8000/abbreviations/search?query=${encodeURIComponent(query)}`)
+      fetch(`http://fefu.online:8000/abbreviations/search?query=${encodeURIComponent(query)}`)
         .then((res) => res.json())
         .then((data: Abbreviation[]) => {
           setSuggestions(data.slice(0, 7))
