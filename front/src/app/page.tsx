@@ -27,6 +27,7 @@ export default function HomePage() {
       <main className="flex-grow">
         <div className="p-6 mt-[20px]">
           <SearchBar onSearch={setSearchValue} fullDataList={dataList} />
+          <p className="text-sm text-gray-500 mt-2">Поиск: {searchValue}</p>
         </div>
         <div className='bg-[#CCD7E0] h-[6px] w-full mt-[20px]'></div>
         <div className="px-4 md:px-[80px] mt-[20px]">
