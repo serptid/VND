@@ -16,7 +16,7 @@ export default function HomePage() {
   const [dataList, setDataList] = useState<Abbreviation[]>([])
 
   useEffect(() => {
-    fetch('https://fefu.online:8000/abbreviations/')
+    fetch('/api/abbreviations/')
       .then((res) => res.json())
       .then((data) => setDataList(data))
       .catch((err) => console.error('Ошибка при загрузке:', err))
