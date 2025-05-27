@@ -1,23 +1,32 @@
 // app/page.tsx
 'use client' // обязательно для использования useEffect
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBar from './components/SearchBox'
 import { FiClipboard, FiUser, FiLink, FiTerminal   } from 'react-icons/fi'
 
-const dataList = [
-  { term: "Текст 1", example: "Пример использования 1" },
-  { term: "Текст 2", example: "Пример использования 2" },
-  { term: "Текст 3", example: "Пример использования 3" },
-];
+interface Abbreviation {
+  short: string
+  description: string
+  example: string
+}
 
 export default function HomePage() {
   const [searchValue, setSearchValue] = useState('')
+  const [dataList, setDataList] = useState<Abbreviation[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:8000/abbreviations/')
+      .then((res) => res.json())
+      .then((data) => setDataList(data))
+      .catch((err) => console.error('Ошибка при загрузке:', err))
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-grow">
         <div className="p-6 mt-[20px]">
-          <SearchBar onSearch={setSearchValue} />
+          <SearchBar onSearch={setSearchValue} fullDataList={dataList} />
         </div>
         <div className='bg-[#CCD7E0] h-[6px] w-full mt-[20px]'></div>
         <div className="px-4 md:px-[80px] mt-[20px]">
@@ -29,29 +38,34 @@ export default function HomePage() {
 
           {/* Контент */}
           <div className="flex flex-col gap-6">
-            {dataList.map((item, index) => (
-              <div key={index} className="flex flex-col md:flex-row gap-2 md:gap-6">
-                {/* Слово */}
-                <div className="flex-1">
-                  <div className="bg-[#E6EFF6] rounded-[20px] px-6 py-4">
-                    <div className="flex items-start gap-2 text-black">
-                      <span className="text-[#0067BA] font-bold">{index + 1}</span>
-                      <span className="break-words">{item.term}</span>
+            {dataList.map((item, index) => {
+              const safeId = item.short.replace(/[^a-zA-Z0-9-_]/g, '-')
+              return (
+                <div key={index} id={safeId} className="flex flex-col md:flex-row gap-2 md:gap-6">
+                  {/* Слово */}
+                  <div className="flex-1">
+                    <div className="bg-[#E6EFF6] rounded-[20px] px-6 py-4">
+                      <div className="flex items-start gap-2 text-black">
+                        <span className="text-[#0067BA] font-bold">{index + 1}</span>
+                        <span className="break-words">
+                          {item.short} — {item.description}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Пример */}
-                <div className="flex-1">
-                  <div className="bg-[#E6EFF6] rounded-[20px] px-6 py-4">
-                    <div className="flex items-start gap-2 text-black">
-                      <FiClipboard className="text-[#0067BA] mt-[2px]" />
-                      <span className="break-words">{item.example}</span>
+                  {/* Пример */}
+                  <div className="flex-1">
+                    <div className="bg-[#E6EFF6] rounded-[20px] px-6 py-4">
+                      <div className="flex items-start gap-2 text-black">
+                        <FiClipboard className="text-[#0067BA] mt-[2px]" />
+                        <span className="break-words">{item.example}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
