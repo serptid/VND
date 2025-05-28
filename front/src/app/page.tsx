@@ -54,7 +54,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f5faff]">
       <main className="flex-grow px-4 md:px-[80px] py-6 max-w-6xl mx-auto">
-        <SearchBar onSearch={setSelectedTerm} />
+        <SearchBar onSearch={setSelectedTerm} fullDataList={[]} />
         <div className="my-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Найти по алфавиту</h2>
           <div className="grid grid-cols-8 gap-2 max-w-[500px]">
