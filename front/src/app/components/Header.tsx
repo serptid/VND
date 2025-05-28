@@ -1,36 +1,43 @@
-import Link from 'next/link'
 import Image from 'next/image'
+import { FiUser, FiEye } from 'react-icons/fi'
 
 export default function Header() {
   return (
-    <header>
-      <div>
-        <nav className="relative flex items-center w-full h-[100px]">
+    <header className="bg-white shadow-md border-b border-blue-500">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between">
+        <div className="flex items-center space-x-4 mb-4 md:mb-0">
           <a
-            href="https://esa.dvfu.ru/"
+            href="https://esa.dvfu.ru"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:block text-[#428BCA] hover:underline absolute left-0 z-10 pl-[80px]"
+            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200"
           >
-            Личный кабинет
+            <FiUser className="text-xl mr-2" />
+            <span className="hidden sm:inline font-medium">Личный кабинет</span>
           </a>
-          <Link href="/" className="absolute left-1/2 transform -translate-x-1/2 mt-[14px] mb-[14px] z-0">
-            <Image
-              src="/logo.png"
-              alt=""
-              width={358}
-              height={71}
-              className=""
-            />
-          </Link>
-        </nav>
-      </div>
-        <div className='bg-[#0067B1] h-[35px] pl-[80px] pr-[80px] flex items-center sticky top-0 z-50'>
-            <nav className="flex items-center w-full">
-              <a href="https://www.dvfu.ru/about/" target="_blank" rel="noopener noreferrer" className='text-[#AED6EF] hover:underline'>Об Университете</a>
-              <Link href="/about" className="text-[#AED6EF] hover:underline ml-auto">О нас</Link>
-            </nav>
+
+          <div className="flex items-center">
+            <Image src="/logo2.svg" alt="ДВФУ" width={48} height={48} className="rounded-md mr-2" />
+            <div className="text-blue-800 font-bold text-lg">
+              ДВФУ
+              <div className="text-sm font-normal text-gray-700 leading-tight">ДАЛЬНЕВОСТОЧНЫЙ ФЕДЕРАЛЬНЫЙ УНИВЕРСИТЕТ</div>
+            </div>
+          </div>
         </div>
+
+        <div className="flex items-center space-x-4 text-sm">
+          <div className="flex space-x-2">
+            <button className="text-gray-600 hover:text-blue-600 font-medium">RU</button>
+            <span className="text-gray-400">|</span>
+            <button className="text-gray-400 hover:text-blue-600">EN</button>
+          </div>
+          <button className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200">
+            <FiEye className="text-lg mr-1" />
+            <span className="hidden sm:inline">Версия для слабовидящих</span>
+          </button>
+        </div>
+      </div>
+      <div className="w-full h-[2px] bg-blue-600"></div>
     </header>
   )
 }

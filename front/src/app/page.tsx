@@ -2,92 +2,114 @@
 
 import { useEffect, useState } from 'react'
 import SearchBar from './components/SearchBox'
-import { FiClipboard, FiUser, FiLink, FiTerminal } from 'react-icons/fi'
+import { FiClipboard } from 'react-icons/fi'
+import { useAlphabetFilter } from './components/useAlphabetFilter'
 
-const dataList = [
-  { term: "АКЦИЯ", example: "Ценная бумага, удостоверяющая право её владельца на долю в капитале..." },
-  { term: "БЕНЕФИЦИАР", example: "Лицо, которому предназначен доход или выгода..." },
-  { term: "ИНФЛЯЦИЯ", example: "Рост общего уровня цен на товары и услуги..." },
-]
-
-const searchHistory = dataList.slice(0, 2)
+interface Abbreviation {
+  term: string
+  description: string
+  example: string
+}
 
 export default function HomePage() {
+  const [dataList, setDataList] = useState<Abbreviation[]>([])
   const [selectedTerm, setSelectedTerm] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const selectedItem = dataList.find(item =>
+  const { selectedLetter, setSelectedLetter, filteredList } = useAlphabetFilter(dataList)
+
+  useEffect(() => {
+    fetch('http://localhost:8000/abbreviations/')
+      .then(res => res.json())
+      .then(data => {
+        const mapped = data.map((item: any) => ({
+          term: item.short,
+          description: item.description || '—',
+          example: item.example || '—'
+        }))
+        setDataList(mapped)
+        setLoading(false)
+      })
+      .catch(() => {
+        setError('Ошибка загрузки данных')
+        setLoading(false)
+      })
+  }, [])
+
+  const selectedItem = filteredList.find(item =>
     item.term.toLowerCase() === selectedTerm?.toLowerCase()
   )
 
+  const alphabet = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
+
+  const handleCardClick = (term: string) => {
+    setSelectedTerm(term)
+    const element = document.getElementById('selected-card')
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#a0a0a013]">
-      <main className="flex-grow">
-        <div className="p-6 mt-[15px]">
-          <SearchBar onSearch={setSelectedTerm} />
-        </div>
-        <div className='bg-[#CCD7E0] h-[6px] w-full mt-[15px]'></div>
-
-        <div className="px-4 md:px-[80px] mt-[20px]">
-
-          <nav className="flex flex-col md:flex-row gap-6 justify-between">
-            {/* Блок: Расшифровка выбранной аббревиатуры */}
-            <div className="flex-1 flex flex-col gap-6">
-              {selectedItem ? (
-                <div className="bg-[#E6EFF6] border-[1px] border-blue-500 rounded-[20px] px-6 py-4">
-                  <div className="flex items-start gap-2 text-black mb-2">
-                    <span className="text-[#0067BA] font-bold uppercase">{selectedItem.term}</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-black">
-                    <FiClipboard className="text-[#0067BA] mt-[2px]" />
-                    <span className="break-words">{selectedItem.example}</span>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-gray-500">Выберите аббревиатуру или воспользуйтесь поиском</p>
-              )}
-            </div>
-
-            {/* Блок: Список всех аббревиатур */}
-            <div className="w-full md:w-[300px] bg-white shadow-md rounded-[12px] p-4 h-fit">
-              <p className="font-bold text-[#0067BA] mb-2">Список всех аббревиатур</p>
-              <ul className="list-disc list-inside text-[#333]">
-                {searchHistory.map((term, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => setSelectedTerm(term.term)}
-                      className="text-[#0067BA] hover:underline text-left"
-                    >
-                      {term.term}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </main>
-
-      <footer className="bg-[#E6EFF6] border-t-2 border-[#CCD7E0] w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0 px-4 md:px-[80px] py-4 md:h-[130px]">
-        <div className="text-sm text-black">© 2025</div>
-
-        <div className="shadow-md px-4 py-2 text-sm text-black rounded bg-white w-full md:w-[290px]">
-          <p className="font-semibold mb-2">Контактные данные</p>
-          <div className="flex flex-col gap-2 text-[#0067BA]">
-            <a href="https://t.me/ProkopenkoSR" className="flex items-center gap-2 hover:underline">
-              <FiUser />
-              <span>Telegram</span>
-            </a>
-            <a href="https://github.com/serptid/VND" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:underline">
-              <FiLink />
-              <span>GitHub</span>
-            </a>
-            <a href="https://t.me/imctech" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:underline">
-              <FiTerminal />
-              <span>IMTech</span>
-            </a>
+    <div className="min-h-screen flex flex-col bg-[#f5faff]">
+      <main className="flex-grow px-4 md:px-[80px] py-6 max-w-6xl mx-auto">
+        <SearchBar onSearch={setSelectedTerm} />
+        <div className="my-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Найти по алфавиту</h2>
+          <div className="grid grid-cols-8 gap-2 max-w-[500px]">
+            {alphabet.map((letter) => (
+              <button
+                key={letter}
+                onClick={() => setSelectedLetter(letter)}
+                className={`px-3 py-1 rounded-md font-medium transition text-sm md:text-base ${
+                  selectedLetter === letter
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
+                }`}
+              >
+                {letter}
+              </button>
+            ))}
+            {selectedLetter && (
+              <button
+                onClick={() => setSelectedLetter(null)}
+                className="col-span-2 px-3 py-1 rounded-md bg-red-100 text-red-600 hover:bg-red-200"
+              >
+                Сброс
+              </button>
+            )}
           </div>
         </div>
-      </footer>
+
+        {selectedItem && (
+          <div id="selected-card" className="mb-8 bg-[#E6EFF6] border-l-4 border-blue-500 px-6 py-4 rounded-lg shadow-inner">
+            <h3 className="text-lg text-blue-700 font-bold uppercase mb-2">{selectedItem.term}</h3>
+            <div className="flex items-start gap-2 text-black text-base">
+              <FiClipboard className="text-[#0067BA] mt-[2px]" />
+              <span>{selectedItem.description}</span>
+            </div>
+            <p className="mt-2 text-sm text-gray-600 italic">Пример использования: {selectedItem.example}</p>
+          </div>
+        )}
+
+        {loading && <p className="text-center text-gray-500 text-lg">Загрузка...</p>}
+        {error && <p className="text-center text-red-500 text-lg">{error}</p>}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredList.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => handleCardClick(item.term)}
+              className="bg-white border border-blue-200 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition"
+            >
+              <h3 className="text-blue-700 text-xl font-bold mb-2">{item.term}</h3>
+              <p className="text-gray-800 mb-2">{item.description}</p>
+              <p className="text-gray-500 text-sm italic">Пример: {item.example}</p>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   )
 }
