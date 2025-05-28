@@ -5,8 +5,8 @@ import Header from "@/app/components/Header"
 
 
 export const metadata = {
-  title: 'Моё простое приложение',
-  description: 'Создано с помощью Next.js',
+  title: 'ДВФУ - Аббревиатуры',
+  description: 'Создал Улько Данила',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

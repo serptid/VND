@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchBar from './components/SearchBox'
 import { FiClipboard, FiUser, FiLink, FiTerminal } from 'react-icons/fi'
 
@@ -28,6 +28,7 @@ export default function HomePage() {
         <div className='bg-[#CCD7E0] h-[6px] w-full mt-[15px]'></div>
 
         <div className="px-4 md:px-[80px] mt-[20px]">
+
           <nav className="flex flex-col md:flex-row gap-6 justify-between">
             {/* Блок: Расшифровка выбранной аббревиатуры */}
             <div className="flex-1 flex flex-col gap-6">

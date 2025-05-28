@@ -17,7 +17,7 @@ export default function SearchBar({ onSearch }: { onSearch: (value: string) => v
   }
 
   return (
-    <div className="flex items-center border border-blue-500 rounded-full px-4 py-2 bg-blue-50 w-full max-w-[1000px] h-[50px] mx-auto">
+    <div className="flex items-center border border-blue-500 rounded-full px-4 py-2 bg-blue-50 w-full max-w-[1200px] h-[50px] mx-auto">
       <FiSearch className="text-blue-500 mr-2" />
       <input
         type="text"
