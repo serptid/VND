@@ -20,14 +20,15 @@ export default function HomePage() {
   const { selectedLetter, setSelectedLetter, filteredList } = useAlphabetFilter(dataList)
 
   useEffect(() => {
-    fetch('http://localhost:8000/abbreviations/')
+    fetch('api/abbreviations/')
       .then(res => res.json())
-      .then(data => {
-        const mapped = data.map((item: any) => ({
+      .then((data: { short: string; description?: string; example?: string }[]) => {
+        const mapped = data.map((item) => ({
           term: item.short,
           description: item.description || '—',
-          example: item.example || '—'
+          example: item.example || '—',
         }))
+
         setDataList(mapped)
         setLoading(false)
       })

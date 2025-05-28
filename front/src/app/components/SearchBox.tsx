@@ -19,10 +19,10 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     }
 
     const timeout = setTimeout(() => {
-      fetch(`http://localhost:8000/abbreviations/search?query=${encodeURIComponent(query)}`)
+      fetch(`api/abbreviations/search?query=${encodeURIComponent(query)}`)
         .then(res => res.json())
-        .then(data => {
-          const mapped = data.map((item: any) => item.short)
+        .then((data: { short: string }[]) => {
+          const mapped = data.map((item) => item.short)
           setSuggestions(mapped.slice(0, 5))
         })
         .catch(() => setSuggestions([]))
