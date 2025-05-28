@@ -5,7 +5,6 @@ import { FiSearch, FiX } from 'react-icons/fi'
 
 interface SearchBarProps {
   onSearch: (value: string) => void
-  fullDataList: Abbreviation[]
 }
 
 interface Abbreviation {
@@ -14,7 +13,7 @@ interface Abbreviation {
   example: string
 }
 
-export default function SearchBar({ onSearch, fullDataList }: SearchBarProps) {
+export default function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
