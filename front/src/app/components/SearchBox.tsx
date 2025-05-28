@@ -7,12 +7,6 @@ interface SearchBarProps {
   onSearch: (value: string) => void
 }
 
-interface Abbreviation {
-  short: string
-  description: string
-  example: string
-}
-
 export default function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<string[]>([])
