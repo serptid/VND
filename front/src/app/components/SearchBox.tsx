@@ -52,30 +52,30 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <div className="relative w-full max-w-[1200px] mx-auto">
-      <div className="flex items-center border border-blue-500 rounded-full px-4 py-2 bg-blue-50 w-full h-[50px]">
-        <FiSearch className="text-blue-500 mr-2" />
+      <div className="flex items-center border border-blue-500 rounded-full px-4 py-2 bg-blue-50 dark:bg-gray-800 w-full h-[50px] transition-colors">
+        <FiSearch className="text-blue-500 dark:text-blue-300 mr-2" />
         <input
           type="text"
           placeholder="Введите аббревиатуру для поиска..."
-          className="flex-grow bg-transparent focus:outline-none text-black"
+          className="flex-grow bg-transparent focus:outline-none text-black dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
           value={query}
           onChange={handleChange}
           onFocus={() => query && setShowSuggestions(true)}
         />
         {query && (
           <button onClick={handleClear} type="button">
-            <FiX className="text-blue-500 ml-2" />
+            <FiX className="text-blue-500 dark:text-blue-300 ml-2" />
           </button>
         )}
       </div>
 
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-10 w-full mt-1 bg-white border border-blue-100 rounded-lg shadow-lg overflow-hidden">
+        <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-900 border border-blue-100 dark:border-blue-700 rounded-lg shadow-lg overflow-hidden">
           {suggestions.map((term, index) => (
             <li
               key={index}
               onClick={() => handleSuggestionClick(term)}
-              className="px-4 py-2 text-sm hover:bg-blue-50 cursor-pointer text-gray-800"
+              className="px-4 py-2 text-sm hover:bg-blue-50 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200"
             >
               {term}
             </li>
