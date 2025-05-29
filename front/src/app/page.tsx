@@ -1,10 +1,11 @@
+// app/page.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
+import Header from './components/Header'
 import SearchBar from './components/SearchBox'
 import { FiClipboard } from 'react-icons/fi'
 import { useAlphabetFilter } from './components/useAlphabetFilter'
-import ThemeToggle from './components/ThemeToggle'
 
 interface Abbreviation {
   term: string
@@ -55,7 +56,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f5faff] dark:bg-[#0d1117] dark:text-white transition-colors duration-300">
-      <ThemeToggle />
+      <Header />
 
       <main className="flex-grow px-4 md:px-[80px] py-6 max-w-6xl mx-auto">
         <SearchBar onSearch={setSelectedTerm} />
