@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import SearchBar from './components/SearchBox'
 import { FiClipboard } from 'react-icons/fi'
 import { useAlphabetFilter } from './components/useAlphabetFilter'
+import ThemeToggle from './components/ThemeToggle'
 
 interface Abbreviation {
   term: string
@@ -53,12 +54,14 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f5faff]">
+    <div className="min-h-screen flex flex-col bg-[#f5faff] dark:bg-[#0d1117] dark:text-white transition-colors duration-300">
+      <ThemeToggle />
+
       <main className="flex-grow px-4 md:px-[80px] py-6 max-w-6xl mx-auto">
         <SearchBar onSearch={setSelectedTerm} />
 
         <div className="my-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Найти по алфавиту</h2>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Найти по алфавиту</h2>
           <div className="grid grid-cols-8 gap-2 max-w-[500px]">
             {alphabet.map((letter) => (
               <button
@@ -67,7 +70,7 @@ export default function HomePage() {
                 className={`px-3 py-1 rounded-md font-medium transition text-sm md:text-base ${
                   selectedLetter === letter
                     ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-800 hover:bg-blue-100'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-blue-100 dark:hover:bg-gray-600'
                 }`}
               >
                 {letter}
@@ -76,7 +79,7 @@ export default function HomePage() {
             {selectedLetter && (
               <button
                 onClick={() => setSelectedLetter(null)}
-                className="col-span-2 px-3 py-1 rounded-md bg-red-100 text-red-600 hover:bg-red-200"
+                className="col-span-2 px-3 py-1 rounded-md bg-red-100 dark:bg-red-400 text-red-600 dark:text-white hover:bg-red-200 dark:hover:bg-red-500"
               >
                 Сброс
               </button>
@@ -85,17 +88,24 @@ export default function HomePage() {
         </div>
 
         {selectedItem && (
-          <div id="selected-card" className="mb-8 bg-[#E6EFF6] border-l-4 border-blue-500 px-6 py-4 rounded-lg shadow-inner">
-            <h3 className="text-lg text-blue-700 font-bold uppercase mb-2">{selectedItem.term}</h3>
-            <div className="flex items-start gap-2 text-black text-base">
-              <FiClipboard className="text-[#0067BA] mt-[2px]" />
+          <div
+            id="selected-card"
+            className="mb-8 bg-[#E6EFF6] dark:bg-gray-800 border-l-4 border-blue-500 px-6 py-4 rounded-lg shadow-inner"
+          >
+            <h3 className="text-lg text-blue-700 dark:text-blue-300 font-bold uppercase mb-2">
+              {selectedItem.term}
+            </h3>
+            <div className="flex items-start gap-2 text-black dark:text-white text-base">
+              <FiClipboard className="text-[#0067BA] dark:text-blue-400 mt-[2px]" />
               <span>{selectedItem.description}</span>
             </div>
-            <p className="mt-2 text-sm text-gray-600 italic">Пример использования: {selectedItem.example}</p>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 italic">
+              Пример использования: {selectedItem.example}
+            </p>
           </div>
         )}
 
-        {loading && <p className="text-center text-gray-500 text-lg">Загрузка...</p>}
+        {loading && <p className="text-center text-gray-500 dark:text-gray-300 text-lg">Загрузка...</p>}
         {error && <p className="text-center text-red-500 text-lg">{error}</p>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -103,11 +113,11 @@ export default function HomePage() {
             <div
               key={index}
               onClick={() => handleCardClick(item.term)}
-              className="bg-white border border-blue-200 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition"
+              className="bg-white dark:bg-gray-900 border border-blue-200 dark:border-blue-700 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition"
             >
-              <h3 className="text-blue-700 text-xl font-bold mb-2">{item.term}</h3>
-              <p className="text-gray-800 mb-2">{item.description}</p>
-              <p className="text-gray-500 text-sm italic">Пример: {item.example}</p>
+              <h3 className="text-blue-700 dark:text-blue-300 text-xl font-bold mb-2">{item.term}</h3>
+              <p className="text-gray-800 dark:text-gray-200 mb-2">{item.description}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm italic">Пример: {item.example}</p>
             </div>
           ))}
         </div>
