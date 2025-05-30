@@ -62,7 +62,7 @@ export default function HomePage() {
 
         <div className="my-6">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Найти по алфавиту</h2>
-          <div className="grid grid-cols-8 md:grid-cols-16 gap-2 max-w-[500px]">
+          <div className="grid grid-cols-8 md:grid-cols-16 gap-2 max-w-[1000px] md:max-w-[500px]">
             {alphabet.map((letter) => (
               <button
                 key={letter}
