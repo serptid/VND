@@ -19,7 +19,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     }
 
     const timeout = setTimeout(() => {
-      fetch(`api/abbreviations/search?query=${encodeURIComponent(query)}`)
+      fetch(`http://77.91.66.54:8000/abbreviations/search?query=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then((data: { short: string }[]) => {
           const mapped = data.map((item) => item.short)
