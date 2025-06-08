@@ -21,7 +21,7 @@ export default function HomePage() {
   const { selectedLetter, setSelectedLetter, filteredList } = useAlphabetFilter(dataList)
 
   useEffect(() => {
-    fetch('http://77.91.66.54:8000/abbreviations/')
+    fetch('/api/abbreviations/')
       .then(res => res.json())
       .then((data: { short: string; description?: string; example?: string }[]) => {
         const mapped = data.map((item) => ({
