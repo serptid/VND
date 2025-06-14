@@ -43,7 +43,7 @@ export default function HomePage() {
     item.term.toLowerCase() === selectedTerm?.toLowerCase()
   )
 
-  const alphabet = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
+  const alphabet = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ1'.split('')
 
   const handleCardClick = (term: string) => {
     setSelectedTerm(term)
