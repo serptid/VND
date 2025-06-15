@@ -17,6 +17,7 @@ services:
       timeout: 5s
       retries: 5
 
+
   backend:
     build:
       context: ./back
@@ -28,8 +29,7 @@ services:
     env_file:
       - ./back/.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     restart: unless-stopped
 
   frontend:
