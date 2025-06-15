@@ -28,9 +28,9 @@ services:
     env_file:
       - ./back/.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
     restart: unless-stopped
+
 
   frontend:
     build:
